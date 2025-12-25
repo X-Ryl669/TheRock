@@ -37,18 +37,9 @@ on:
       amdgpu_family:
         type: choice
         options:
-          - gfx101X-dgpu
-          - gfx103X-dgpu
-          - gfx110X-all
-          - gfx1150
-          - gfx1151
           - gfx1152
           - gfx1153
-          - gfx120X-all
-          - gfx90X-dcgpu
-          - gfx94X-dcgpu
-          - gfx950-dcgpu
-        default: gfx94X-dcgpu
+        default: gfx1152
       release_type:
         description: The type of release to build ("dev", "nightly", or "prerelease"). All developer-triggered jobs should use "dev"!
         type: string

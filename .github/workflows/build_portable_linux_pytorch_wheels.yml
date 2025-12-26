@@ -138,6 +138,10 @@ jobs:
       torchvision_version: ${{ steps.build-pytorch-wheels.outputs.torchvision_version }}
       triton_version: ${{ steps.build-pytorch-wheels.outputs.triton_version }}
     steps:
+      - name: Get disk space
+        run: |
+          df -h
+  
       - name: Free Disk Space
         uses: endersonmenezes/free-disk-space@v3  # Use @main for latest, @v3 for stable
         with:
@@ -152,6 +156,10 @@ jobs:
           rm_cmd: "rmz"  # Use 'rmz' for faster deletion (default: 'rm')
           rmz_version: "3.1.1"  # Required when rm_cmd is 'rmz'
           testing: false
+      - name: Get disk space
+        run: |
+          df -h
+
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:

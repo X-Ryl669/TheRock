@@ -145,6 +145,7 @@ jobs:
           df -h
 
       - name: Cleanup unused space
+        if: false
         run: |
           # Remove Java (JDKs)
           rm -rf /host/usr/lib/jvm
@@ -233,6 +234,8 @@ jobs:
         id: build-pytorch-wheels
         run: |
           echo "Building PyTorch wheels for ${{ inputs.amdgpu_family }}"
+          find ./external-builds/pytorch
+          false
           echo "5cc0b2dc0e35bbaef25739ebe6e9f1341af88a93" > ./external-builds/pytorch/pytorch/.ci/docker/aotriton_version.txt
           ./external-builds/pytorch/build_prod_wheels.py \
             build \

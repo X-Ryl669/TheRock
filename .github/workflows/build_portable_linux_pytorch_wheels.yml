@@ -108,26 +108,13 @@ permissions:
 run-name: Build portable Linux PyTorch Wheels (${{ inputs.amdgpu_family }}, ${{ inputs.python_version }}, ${{ inputs.release_type }})
 
 jobs:
-  setup:
-    name: "Setup host before container"
-    runs-on: ${{ github.repository_owner == 'ROCm' && 'azure-linux-scale-rocm' || 'ubuntu-24.04' }}
-    steps:
-      - name: Get disk space
-        run: |
-          df -h
-      - name: Cleanup unused space
-        uses: mathio/gha-cleanup@v1
-        with:
-          remove-browsers: true
-          verbose: true
-      - name: Get disk space
-        run: |
-          df -h
   build_pytorch_wheels:
     name: Build | ${{ inputs.amdgpu_family }} | py ${{ inputs.python_version }} | torch ${{ inputs.pytorch_git_ref }}
-    needs: setup
+    runs-on: ${{ github.repository_owner == 'ROCm' && 'azure-linux-scale-rocm' || 'ubuntu-24.04' }}
     container:
       image: ghcr.io/rocm/therock_build_manylinux_x86_64@sha256:583d473f263a289222c48d4b493e2956b2354a45796f09dee6f2c8ecd4504ab6
+      volumes:
+        - /:/host
     env:
       OUTPUT_DIR: ${{ github.workspace }}/output
       PACKAGE_DIST_DIR: ${{ github.workspace }}/output/packages/dist
@@ -158,10 +145,39 @@ jobs:
           df -h
 
       - name: Cleanup unused space
-        uses: mathio/gha-cleanup@v1
-        with:
-          remove-browsers: true
-          verbose: true
+        run: |
+          # Remove Java (JDKs)
+          sudo rm -rf /host/usr/lib/jvm
+      
+          # Remove .NET SDKs
+          sudo rm -rf /host/usr/share/dotnet
+      
+          # Remove Swift toolchain
+          sudo rm -rf /host/usr/share/swift
+      
+          # Remove Haskell (GHC)
+          sudo rm -rf /host/usr/local/.ghcup
+      
+          # Remove Julia
+          sudo rm -rf /host/usr/local/julia*
+      
+          # Remove Android SDKs
+          sudo rm -rf /host/usr/local/lib/android
+      
+          # Remove Chromium (optional if not using for browser tests)
+          sudo rm -rf /host/usr/local/share/chromium
+      
+          # Remove Microsoft/Edge and Google Chrome builds
+          sudo rm -rf /host/opt/microsoft /opt/google
+      
+          # Remove Azure CLI
+          sudo rm -rf /host/opt/az
+      
+          # Remove PowerShell
+          sudo rm -rf /host/usr/local/share/powershell
+      
+          # Remove CodeQL and other toolcaches
+          sudo rm -rf /host/opt/hostedtoolcache
 
       - name: Get disk space
         run: |

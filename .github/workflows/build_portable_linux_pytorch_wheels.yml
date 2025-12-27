@@ -147,37 +147,26 @@ jobs:
       - name: Cleanup unused space
         run: |
           # Remove Java (JDKs)
-          sudo rm -rf /host/usr/lib/jvm
-      
+          rm -rf /host/usr/lib/jvm
           # Remove .NET SDKs
-          sudo rm -rf /host/usr/share/dotnet
-      
+          rm -rf /host/usr/share/dotnet
           # Remove Swift toolchain
-          sudo rm -rf /host/usr/share/swift
-      
+          rm -rf /host/usr/share/swift
           # Remove Haskell (GHC)
-          sudo rm -rf /host/usr/local/.ghcup
-      
+          rm -rf /host/usr/local/.ghcup
           # Remove Julia
-          sudo rm -rf /host/usr/local/julia*
-      
+          rm -rf /host/usr/local/julia*
           # Remove Android SDKs
-          sudo rm -rf /host/usr/local/lib/android
-      
+          rm -rf /host/usr/local/lib/android
           # Remove Chromium (optional if not using for browser tests)
-          sudo rm -rf /host/usr/local/share/chromium
-      
-          # Remove Microsoft/Edge and Google Chrome builds
-          sudo rm -rf /host/opt/microsoft /opt/google
-      
+          rm -rf /host/usr/local/share/chromium
+          rm -rf /host/opt/microsoft /opt/google
           # Remove Azure CLI
-          sudo rm -rf /host/opt/az
-      
+          rm -rf /host/opt/az
           # Remove PowerShell
-          sudo rm -rf /host/usr/local/share/powershell
-      
+          rm -rf /host/usr/local/share/powershell
           # Remove CodeQL and other toolcaches
-          sudo rm -rf /host/opt/hostedtoolcache
+          rm -rf /host/opt/hostedtoolcache
 
       - name: Get disk space
         run: |

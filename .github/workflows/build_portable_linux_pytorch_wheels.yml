@@ -108,17 +108,25 @@ permissions:
 run-name: Build portable Linux PyTorch Wheels (${{ inputs.amdgpu_family }}, ${{ inputs.python_version }}, ${{ inputs.release_type }})
 
 jobs:
-- name: Get disk space
-  run: |
-      df -h
+ - prepare_host:
+    name: "Prepare host before container"
+    runs-on: ${{ github.repository_owner == 'ROCm' && 'azure-linux-scale-rocm' || 'ubuntu-24.04' }}
+    steps:
+      - name: Get disk space
+        run: |
+          df -h
 
-- name: Cleanup unused space
-  uses: mathio/gha-cleanup@v1
-    with:
-      remove-browsers: true
-      verbose: true
+      - name: Cleanup unused space
+        uses: mathio/gha-cleanup@v1
+        with:
+          remove-browsers: true
+          verbose: true
 
-- build_pytorch_wheels:
+      - name: Get disk space
+        run: |
+          df -h
+
+ - build_pytorch_wheels:
     name: Build | ${{ inputs.amdgpu_family }} | py ${{ inputs.python_version }} | torch ${{ inputs.pytorch_git_ref }}
     runs-on: ${{ github.repository_owner == 'ROCm' && 'azure-linux-scale-rocm' || 'ubuntu-24.04' }}
     container:
